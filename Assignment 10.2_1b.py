@@ -6,7 +6,8 @@ Created on Sun May 19 17:05:09 2019
 """
 
 from multiprocessing import Pool
-import os, time, json
+import os, time
+from nltk.tokenize import word_tokenize
 
 # Path to json files
 # For the limited local memory, I copied article 13 and 14 to the following directory
@@ -16,7 +17,8 @@ directory = 'C:/Users/Anirban/Desktop/Masters/MSDSC/DSC550/Excercise/data/wikipe
 json_files = [entry.path
               for entry in os.scandir(directory) if entry.name.endswith('.jsonl')]
 
-def read_jsonl_articles(x):
+
+def tokenize_json_articles(x):
     """
     Args:
         default
@@ -24,13 +26,9 @@ def read_jsonl_articles(x):
         data read from the json file(s)
     """
     
-    records = []
-    for i in json_files:
+    for i in json_files[0:2]:
         with open(i,'r') as fi:
-            for line in fi:
-               records.append(json.loads(line))
-    
-    return records
+            tokens = word_tokenize(fi.read())
 
 if __name__ == '__main__':
     
@@ -41,5 +39,5 @@ if __name__ == '__main__':
     for i in n_processes:
         with Pool(i) as pool:
             start_time = time.time()
-            print(pool.map(read_jsonl_articles, range(5)))
+            print(pool.map(tokenize_json_articles, range(5)))
             print(str(i), "--- %s seconds ---" % (time.time() - start_time))
