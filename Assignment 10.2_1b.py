@@ -26,7 +26,7 @@ def tokenize_json_articles(x):
         data read from the json file(s)
     """
     
-    for i in json_files[0:2]:
+    for i in json_files:
         with open(i,'r') as fi:
             tokens = word_tokenize(fi.read())
 
