@@ -25,6 +25,12 @@ json_files = [entry.path
 
 # Read the json files as data frame
 def read_files(json_files):
+    """
+    Args:
+        list of json files
+    Output:
+        dataframe created by combinig all json files
+    """
     
     records = []
     outdf = pd.DataFrame()
@@ -41,6 +47,13 @@ def read_files(json_files):
 
 # Make everything lower case, remove punctuation and newline
 def clean_text(df):
+     """
+     Args:
+        dataframe to clean
+     Output:
+        dataframe with clean text
+    """
+    
     punc = string.punctuation.replace('<', '').replace('>', '')
     pat = re.compile(f'[{punc}]')
     
@@ -59,11 +72,25 @@ def clean_text(df):
 
 # Create set of words from each data frame text column
 def create_wordset(df, col):
+     """
+     Args:
+        dataframe and text column name
+     Output:
+        set of words extracted from the text column of the data frame
+    """
+    
     results = set()
     df[col].str.split().apply(results.update)
     return results
 
 def mapper(x):
+    """
+    Args:
+        default
+    Output:
+        words and correspoding count
+    """
+    
     text = clean_text(pd.DataFrame(read_files(json_files)['section_texts']))
     text['texts'] = text['section_texts'].apply(lambda x:' '.join([word for word in x.split() if word not in (stop_words)]))
     text['texts'].str.cat(sep=' ')
